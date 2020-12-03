@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-	<img width="80%" src="https://github.com/andrempmattos/cubesat-solar-panels/blob/main/documentation/figures/15.png">
+	<img width="80%" src="https://github.com/andrempmattos/image-processing-dev/blob/main/documentation/figures/lena_rendering_effects.png">
 </p>
 
 ## Overview
