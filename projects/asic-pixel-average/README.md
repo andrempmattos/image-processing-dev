@@ -1,0 +1,1 @@
+## ASIC implementation of average calculation for pixels
