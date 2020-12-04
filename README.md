@@ -1,5 +1,5 @@
 <h1 align="center">
-	Image Processing Projects
+	Image Processing Development
 	<br>
 </h1>
 
@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-	<img width="80%" src="https://github.com/andrempmattos/image-processing-dev/blob/main/documentation/figures/lena_rendering_effects.png">
+	<img width="80%" src="https://github.com/andrempmattos/image-processing-dev/blob/main/banner_lenna.png">
 </p>
 
 ## Overview
@@ -31,10 +31,8 @@ This repository includes a set of image processing projects, documents, and refe
 >The tools used suring the development change from project to project. Refer fo specifics in the documentation folder. 
 
 ## Repository Organization
-	- documentation: Projects documents and images
-	- projects: Sources and scripts
-		- asic-pixel-average: ASIC implementation of average calculation for pixels
-	- references: Useful external links and references in the subject 
+	- asic-pixel-average: ASIC implementation of average calculation for pixels 
+	- ...
 
 ## License
 
