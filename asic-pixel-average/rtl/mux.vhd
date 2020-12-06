@@ -1,6 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
 
 entity mux is
 	port(	
@@ -14,7 +14,7 @@ end entity;
 architecture behavioral of mux is
 
 	begin 
-		control_c <= in_signal_b when (in_ctrl_sel='1') else 
+		control_c <= in_signal_b when std_logic(to_unsigned(in_ctrl_sel) = 1) else 
 					 in_signal_a;
 
 end architecture;

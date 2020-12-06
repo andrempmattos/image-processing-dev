@@ -1,6 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
 
 entity reg is
 	port(	
@@ -17,9 +17,9 @@ architecture behavioral of reg is
 	begin
 		process(in_ctrl_rst, in_ctrl_clk, in_ctrl_en)
     	begin
-	        if (in_ctrl_rst = '1') then
+	        if (to_unsigned(in_ctrl_rst) = 1) then
 	            out_signal_d <= (others=>'0');
-	        elsif (rising_edge(in_ctrl_clk) and (in_ctrl_en='1')) then
+	        elsif (rising_edge(in_ctrl_clk) and (to_unsigned(in_ctrl_en) = 1)) then
 	            out_signal_d <= in_signal_d;
 	    	end if;
 		end process;

@@ -1,7 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;
 
 entity comp is
 	port(	
@@ -14,7 +13,7 @@ end entity;
 architecture behavioral of comp is
 
 	begin 
-		control_c <= '0' when std_logic(unsigned(in_signal_a) > unsigned(in_signal_b)) else 
+		control_c <= '0' when std_logic(to_unsigned(in_signal_a) > to_unsigned(in_signal_b)) else 
 					 '1';
 
 end architecture;
