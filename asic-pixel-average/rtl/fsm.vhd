@@ -18,7 +18,7 @@ end entity;
 
 architecture behavioral of fsm is
 
-	type state_type is (S0,S1,S2);
+	type state_type is (IDLE, RST, ACC, DIV);
 	signal current_state : state_type;
 	signal next_state : state_type;
 
@@ -28,24 +28,26 @@ architecture behavioral of fsm is
 		begin
 			next_state <= current_state;
 			case current_state is
-				when S0 =>
-					if in_ctrl_start = '1' then
-						next_state <= S1;
+				when IDLE =>
+					if (to_unsigned(in_ctrl_start) = 1) then
+						next_state <= RST;
 					end if;
-				when S1 => 
-					next_state <= S2;
-				when S2 =>
-					if in_ctrl_comp = '0' then
-						next_state <= S0;
+				when RST => 
+					next_state <= ACC;
+				when ACC =>
+					if (to_unsigned(in_ctrl_comp) = 1) then
+						next_state <= DIV;
 					end if;
+				when DIV =>
+					next_state <= IDLE;
 			end case;
 		end process;
 
 		-- State register
 		process(in_ctrl_clk, in_ctrl_rst)
 		begin
-			if in_ctrl_rst = '1' then 
-				current_state <= S0;
+			if (to_unsigned(in_ctrl_rst) = 1) then 
+				current_state <= IDLE;
 			elsif rising_edge(in_ctrl_clk) then
 				current_state <= next_state; 
 			end if;
@@ -55,23 +57,29 @@ architecture behavioral of fsm is
 		process(current_state)
 		begin
 			case current_state is
-				when S0 => 
+				when IDLE => 
+					out_ctrl_en    <= '0';
+					out_ctrl_rst   <= '0';
+					out_ctrl_sel_a <= '0';
+					out_ctrl_sel_b <= '0';
+					out_ctrl_ready <= '1';
+				when RST =>
 					out_ctrl_en    <= '0';
 					out_ctrl_rst   <= '1';
 					out_ctrl_sel_a <= '0';
 					out_ctrl_sel_b <= '0';
 					out_ctrl_ready <= '0';
-				when S1 =>
-					out_ctrl_en    <= '0';
-					out_ctrl_rst   <= '1';
+				when ACC =>
+					out_ctrl_en    <= '1';
+					out_ctrl_rst   <= '0';
 					out_ctrl_sel_a <= '0';
 					out_ctrl_sel_b <= '0';
 					out_ctrl_ready <= '0';
-				when S2 =>
-					out_ctrl_en    <= '0';
-					out_ctrl_rst   <= '1';
-					out_ctrl_sel_a <= '0';
-					out_ctrl_sel_b <= '0';
+				when DIV =>
+					out_ctrl_en    <= '1';
+					out_ctrl_rst   <= '0';
+					out_ctrl_sel_a <= '1';
+					out_ctrl_sel_b <= '1';
 					out_ctrl_ready <= '0';
 			end case;
 		end process;

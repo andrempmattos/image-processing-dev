@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity top is
     port(
@@ -7,19 +8,12 @@ entity top is
         top_start	 : in std_logic;
         top_ready    : out std_logic;
         top_mem_data : in std_logic_vector(7 downto 0);
-        top_mem_addr : out std_logic_vector(7 downto 0)
+        top_mem_addr : out std_logic_vector(7 downto 0);
+        top_average  : out std_logic_vector(7 downto 0)
     );
 end entity;
 
 architecture behavioral of top is
-
-    signal signal_reg_in: std_logic_vector(15 downto 0);
-    signal signal_reg_out: std_logic_vector(15 downto 0);
-    signal count_out: std_logic_vector(7 downto 0);
-    signal control_top_c0: std_logic;
-    signal control_top_ena: std_logic;
-    signal control_top_rst: std_logic;
-    signal control_top_busy: std_logic;
 
     component adder is
         port (
@@ -34,6 +28,15 @@ architecture behavioral of top is
             in_signal_a : in std_logic_vector(7 downto 0); 
             in_signal_b : in std_logic_vector(7 downto 0); 
             out_comp    : out std_logic
+        );
+    end component;
+
+    component mux is
+        port (
+            in_ctrl_sel : in std_logic;
+            in_signal_a : in std_logic_vector(7 downto 0); 
+            in_signal_b : in std_logic_vector(7 downto 0);
+            out_mux     : out std_logic_vector(7 downto 0) 
         );
     end component;
 
@@ -68,14 +71,74 @@ architecture behavioral of top is
         );
     end component;
 
-begin
-	U1: adder port map(top_A,signal_reg_out,signal_reg_in);
-	U2: comp  port map(count_out,top_B,control_top_c0);
-    U3: fsm   port map(top_clk,top_start,control_top_c0,control_top_ena,control_top_rst, control_top_busy);
-    U4: count port map(top_clk,control_top_rst,control_top_ena,count_out);
-    U5: reg   port map(signal_reg_in,top_clk,control_top_rst,control_top_ena,signal_reg_out);
+    signal buffer_count    : std_logic_vector(7 downto 0);
+    signal buffer_mem_data : std_logic_vector(15 downto 0);
+    signal buffer_shift_8  : std_logic_vector(15 downto 0);
+    signal buffer_shift_11 : std_logic_vector(15 downto 0);
+    signal buffer_mux_a    : std_logic_vector(15 downto 0);
+    signal buffer_mux_b    : std_logic_vector(15 downto 0);
+    signal buffer_adder    : std_logic_vector(15 downto 0);
+    signal buffer_acc      : std_logic_vector(15 downto 0);
 
-	top_S <= signal_reg_out;
-    top_busy <= control_busy;
+
+begin
+
+    buffer_count <= top_mem_addr;
+    buffer_mem_data <= x"00" & top_mem_data;
+    buffer_shift_8  <= x"00" & buffer_acc(15 downto 8);
+    buffer_shift_11 <= "00000000000" & buffer_acc(15 downto 11);
+
+    top_average <= acc(7 downto 0);
+
+	adder: adder port map(
+                buffer_mux_a,
+                buffer_mux_b,
+                buffer_adder
+            );
+
+    mux_a: mux port map(
+                ctrl_sel_a
+                buffer_reg,
+                buffer_shift_11,
+                buffer_mux_a
+            );
+
+    mux_b: mux port map(
+                ctrl_sel_b
+                buffer_mem_data,
+                buffer_shift_8,
+                buffer_mux_b
+            );
+
+    comp: comp port map(
+                buffer_count,
+                std_logic_vector(225),
+                ctrl_comp
+            );
+
+    count: count port map(
+                top_clk,
+                ctrl_rst,
+                buffer_count
+            );
+
+    acc: reg port map(
+                top_clk,
+                ctrl_rst,
+                ctrl_en,
+                buffer_adder,
+                buffer_acc
+            );
+
+    fsm: fsm port map(
+                ctrl_clk,
+                top_start,
+                ctrl_comp,
+                ctrl_en,
+                ctrl_rst,
+                ctrl_sel_a,
+                ctrl_sel_b,
+                top_ready
+            );
 
 end architecture;
