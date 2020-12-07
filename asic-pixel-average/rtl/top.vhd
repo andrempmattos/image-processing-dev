@@ -34,9 +34,9 @@ architecture behavioral of top is
     component mux is
         port (
             in_ctrl_sel : in std_logic;
-            in_signal_a : in std_logic_vector(7 downto 0); 
-            in_signal_b : in std_logic_vector(7 downto 0);
-            out_mux     : out std_logic_vector(7 downto 0) 
+            in_signal_a : in std_logic_vector(15 downto 0); 
+            in_signal_b : in std_logic_vector(15 downto 0);
+            out_mux     : out std_logic_vector(15 downto 0) 
         );
     end component;
 
@@ -80,49 +80,57 @@ architecture behavioral of top is
     signal buffer_adder    : std_logic_vector(15 downto 0);
     signal buffer_acc      : std_logic_vector(15 downto 0);
 
+    signal ctrl_rst        : std_logic;
+    signal ctrl_comp       : std_logic;
+    signal ctrl_en         : std_logic;
+    signal ctrl_sel_a      : std_logic;
+    signal ctrl_sel_b      : std_logic;
+
+    constant IMAGE_SIZE    : integer range 0 to 255 := 225;
+
 
 begin
 
-    buffer_count <= top_mem_addr;
+    top_mem_addr <= buffer_count;
     buffer_mem_data <= x"00" & top_mem_data;
     buffer_shift_8  <= x"00" & buffer_acc(15 downto 8);
     buffer_shift_11 <= "00000000000" & buffer_acc(15 downto 11);
 
-    top_average <= acc(7 downto 0);
+    top_average <= buffer_acc(7 downto 0);
 
-	adder: adder port map(
+	u_adder: adder port map(
                 buffer_mux_a,
                 buffer_mux_b,
                 buffer_adder
             );
 
-    mux_a: mux port map(
-                ctrl_sel_a
-                buffer_reg,
+    u_mux_a: mux port map(
+                ctrl_sel_a,
+                buffer_acc,
                 buffer_shift_11,
                 buffer_mux_a
             );
 
-    mux_b: mux port map(
-                ctrl_sel_b
+    u_mux_b: mux port map(
+                ctrl_sel_b,
                 buffer_mem_data,
                 buffer_shift_8,
                 buffer_mux_b
             );
 
-    comp: comp port map(
+    u_comp: comp port map(
                 buffer_count,
-                std_logic_vector(225),
+                std_logic_vector(to_unsigned(IMAGE_SIZE, 8)),
                 ctrl_comp
             );
 
-    count: count port map(
+    u_count: count port map(
                 top_clk,
                 ctrl_rst,
                 buffer_count
             );
 
-    acc: reg port map(
+    u_acc: reg port map(
                 top_clk,
                 ctrl_rst,
                 ctrl_en,
@@ -130,8 +138,8 @@ begin
                 buffer_acc
             );
 
-    fsm: fsm port map(
-                ctrl_clk,
+    u_fsm: fsm port map(
+                top_clk,
                 top_start,
                 ctrl_comp,
                 ctrl_en,
