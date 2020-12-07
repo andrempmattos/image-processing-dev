@@ -44,8 +44,8 @@ begin
             );
 
     memory: tb_ram port map(
-                mem_data,
-                mem_addr
+                mem_addr,
+                mem_data
             );
     
     
@@ -55,9 +55,12 @@ begin
 	process
     begin
         start <= '1';
+        wait for 60 ns;
+        start <= '0';
+
         wait until ready = '1';        
 
-        assert (average = x"a0") report "Error: Invalid result!" severity failure;
+        assert (average = x"a0") report "Error: Invalid result!" severity error;
 
         assert false report "Test completed with success!" severity note;
         --  Wait forever; this will finish the simulation.
