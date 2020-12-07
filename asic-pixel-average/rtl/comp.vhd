@@ -13,8 +13,8 @@ end entity;
 architecture behavioral of comp is
 
 	begin 
-		out_comp <= '0' when (unsigned(in_signal_a) > unsigned(in_signal_b)) else 
-					'1';
+		out_comp <= '1' when (unsigned(in_signal_a) >= unsigned(in_signal_b)) else 
+					'0';
 
 end architecture;
 		

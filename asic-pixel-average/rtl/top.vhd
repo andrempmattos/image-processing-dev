@@ -120,7 +120,7 @@ begin
 
     u_comp: comp port map(
                 buffer_count,
-                std_logic_vector(to_unsigned(IMAGE_SIZE, 8)),
+                std_logic_vector(to_unsigned((IMAGE_SIZE-2), 8)),  -- Generate comp signal 2 cycles before
                 ctrl_comp
             );
 
