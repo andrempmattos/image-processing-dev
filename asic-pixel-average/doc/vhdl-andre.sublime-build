@@ -1,0 +1,6 @@
+{
+    "cmd": ["ghdl", "-a", "$file"],
+    //"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+    "selector": "source.vhd",
+    "path": "E:/andre/eda/ghdl/bin"
+}
