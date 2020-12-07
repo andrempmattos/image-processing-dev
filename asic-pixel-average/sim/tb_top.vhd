@@ -30,6 +30,7 @@ end component;
     signal ready    : std_logic := '0';
     signal mem_data : std_logic_vector(7 downto 0) := x"00";
     signal mem_addr : std_logic_vector(7 downto 0) := x"00";
+    signal average  : std_logic_vector(7 downto 0) := x"00";
 	
 begin
 
@@ -47,6 +48,8 @@ begin
                 mem_addr
             );
     
+    
+    
     clock <= not clock after 10 ns; -- when finished /= '1' else '0';
 
 	process
@@ -54,13 +57,12 @@ begin
         start <= '1';
         wait until ready = '1';        
 
-        assert average = x"a0" 
-            report "bad sum value" severity error;
+        assert (average = x"a0") report "Error: Invalid result!" severity failure;
 
-    assert false report "end of test" severity note;
-    --  Wait forever; this will finish the simulation.
-    wait;
-  end process;
+        assert false report "Test completed with success!" severity note;
+        --  Wait forever; this will finish the simulation.
+        wait;
+    end process;
 
 end architecture;
 
