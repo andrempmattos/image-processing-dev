@@ -19,8 +19,8 @@ end entity;
 architecture behavioral of fsm is
 
 	type state_type is (IDLE, RST, ACC, DIV);
-	signal current_state : state_type;
-	signal next_state : state_type;
+	signal current_state : state_type := IDLE;
+	signal next_state : state_type := IDLE;
 
 	begin
 		-- Next state logic
@@ -29,13 +29,13 @@ architecture behavioral of fsm is
 			next_state <= current_state;
 			case current_state is
 				when IDLE =>
-					if (to_unsigned(in_ctrl_start) = 1) then
+					if (in_ctrl_start = '1') then
 						next_state <= RST;
 					end if;
 				when RST => 
 					next_state <= ACC;
 				when ACC =>
-					if (to_unsigned(in_ctrl_comp) = 1) then
+					if (in_ctrl_comp = '1') then
 						next_state <= DIV;
 					end if;
 				when DIV =>
@@ -44,11 +44,9 @@ architecture behavioral of fsm is
 		end process;
 
 		-- State register
-		process(in_ctrl_clk, in_ctrl_rst)
+		process(in_ctrl_clk)
 		begin
-			if (to_unsigned(in_ctrl_rst) = 1) then 
-				current_state <= IDLE;
-			elsif rising_edge(in_ctrl_clk) then
+			if rising_edge(in_ctrl_clk) then
 				current_state <= next_state; 
 			end if;
 		end process;

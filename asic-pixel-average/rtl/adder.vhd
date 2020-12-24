@@ -13,6 +13,6 @@ end entity;
 architecture behavioral of adder is
 	
 	begin
-		out_signal <= std_logic_vector(to_unsigned(in_signal_a) + to_unsigned(in_signal_b));
+		out_signal <= std_logic_vector(unsigned(in_signal_a) + unsigned(in_signal_b));
 
 end architecture;
