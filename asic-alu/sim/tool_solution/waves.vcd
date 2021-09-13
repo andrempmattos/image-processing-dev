@@ -1,0 +1,136 @@
+$date
+  Mon Sep 13 10:53:24 2021
+$end
+$version
+  GHDL v0
+$end
+$timescale
+  1 fs
+$end
+$scope module standard $end
+$upscope $end
+$scope module std_logic_1164 $end
+$upscope $end
+$scope module numeric_std $end
+$upscope $end
+$scope module tb_top $end
+$var reg 2 ! s_in_mux[1:0] $end
+$var reg 8 " s_in_adder[7:0] $end
+$var reg 8 # s_out_result[7:0] $end
+$var reg 1 $ s_out_overflow $end
+$scope module system $end
+$var reg 2 % in_mux[1:0] $end
+$var reg 8 & in_adder[7:0] $end
+$var reg 8 ' out_result[7:0] $end
+$var reg 1 ( out_overflow $end
+$var reg 8 ) s_mux_output[7:0] $end
+$scope module c1_adder $end
+$var reg 8 * in_signal_a[7:0] $end
+$var reg 8 + in_signal_b[7:0] $end
+$var reg 8 , out_signal[7:0] $end
+$var reg 1 - out_overflow $end
+$var reg 9 . auxiliary_vector[8:0] $end
+$upscope $end
+$scope module c2_mux $end
+$var reg 2 / in_ctrl_sel[1:0] $end
+$var reg 8 0 in_signal_a[7:0] $end
+$var reg 8 1 in_signal_b[7:0] $end
+$var reg 8 2 in_signal_c[7:0] $end
+$var reg 8 3 in_signal_d[7:0] $end
+$var reg 8 4 out_mux[7:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+b00 !
+b00011010 "
+b00000001 #
+1$
+b00 %
+b00011010 &
+b00000001 '
+1(
+b11100111 )
+b00011010 *
+b11100111 +
+b00000001 ,
+1-
+b100000001 .
+b00 /
+b11100111 0
+b11101111 1
+b11110111 2
+b11111111 3
+b11100111 4
+#10000000
+b01 !
+b00010010 "
+b00000001 #
+1$
+b01 %
+b00010010 &
+b00000001 '
+1(
+b11101111 )
+b00010010 *
+b11101111 +
+b00000001 ,
+1-
+b100000001 .
+b01 /
+b11101111 4
+#20000000
+b10 !
+b00001010 "
+b00000001 #
+1$
+b10 %
+b00001010 &
+b00000001 '
+1(
+b11110111 )
+b00001010 *
+b11110111 +
+b00000001 ,
+1-
+b100000001 .
+b10 /
+b11110111 4
+#30000000
+b11 !
+b00000010 "
+b00000001 #
+1$
+b11 %
+b00000010 &
+b00000001 '
+1(
+b11111111 )
+b00000010 *
+b11111111 +
+b00000001 ,
+1-
+b100000001 .
+b11 /
+b11111111 4
+#40000000
+b00000001 "
+b00000000 #
+b00000001 &
+b00000000 '
+b00000001 *
+b00000000 ,
+b100000000 .
+#50000000
+b00000000 "
+b11111111 #
+0$
+b00000000 &
+b11111111 '
+0(
+b00000000 *
+b11111111 ,
+0-
+b011111111 .
+#60000000
